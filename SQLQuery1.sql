@@ -5,10 +5,12 @@ Modulo seguridad: Cargo y Usuario
 */
 use master
 go
-if exists(select * from sys.databases where name = 'UniversidadDB')
-begin
-	drop database UniversidadDB
-end
+if DB_ID(N'UniversidadDB') is not null
+BEGIN
+    ALTER DATABASE UniversidadDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+END
+GO
+drop database  if exists UniversidadDB
 go
 create database UniversidadDB
 go
@@ -50,12 +52,14 @@ create table Seguridad.Cargo(
 	, nombre nvarchar not null,
 	created_at datetime default getdate(),
 	updated_at datetime null,
-	deleted_at datetime null
+	deleted_at datetime null,
+
 )
 go
 
 create table Seguridad.Usuario(
 	idUsuario int identity(1,1) primary key,
+	idCargo int not null,
 	cif varchar(8) unique not null
 	, nombres nvarchar(60) not null
 	, apellidos nvarchar(60) not null
@@ -65,6 +69,10 @@ create table Seguridad.Usuario(
 	created_at datetime default getdate(),
 	updated_at datetime null,
 	deleted_at datetime null
+	constraint uq_email unique(email),
+	constraint ck_email check(email like '%_@_%'),
+	constraint fk_usuario_cargo foreign key (idCargo) references Seguridad.Cargo(id)
+
 )
 go
 
