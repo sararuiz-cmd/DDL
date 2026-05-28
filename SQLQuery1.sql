@@ -40,8 +40,7 @@ create table Academico.Estudiante(
 	constraint uq_email unique(email),
 	constraint ck_email check(email like '%_@_%'),
 	constraint fk_id foreign key (id) references Academico.carrera(id)
-	on delete no action
-	on update cascade
+	
 	
 )
 go
@@ -52,7 +51,8 @@ create table Seguridad.Cargo(
 	created_at datetime default getdate(),
 	updated_at datetime null,
 	deleted_at datetime null
-)go
+)
+go
 
 create table Seguridad.Usuario(
 	idUsuario int identity(1,1) primary key,
@@ -60,10 +60,17 @@ create table Seguridad.Usuario(
 	, nombres nvarchar(60) not null
 	, apellidos nvarchar(60) not null
 	, fechaNac datetime null
-	, password nvarchar(60) not null
+	, pw varbinary(64) not null
 	, email nvarchar(120) null,
 	created_at datetime default getdate(),
 	updated_at datetime null,
 	deleted_at datetime null
 )
 go
+
+--Insert
+insert into Academico.Carrera(nombre,precio)
+values('Sistemas',2000)
+update Academico.Carrera set precio=2000.99, updated_at=GETDATE() where id=1
+insert into Seguridad.Usuario(cif,nombres,apellidos,pw)values('401','Juan','Lopez',HASHBYTES('Sha2_256','Temp2026'))
+select * from Seguridad.Usuario
