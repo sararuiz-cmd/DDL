@@ -22,7 +22,7 @@ go
 create schema Seguridad
 go
 create table Academico.Carrera(
-	id int primary key identity(1,1),
+	id_carrera int identity(1,1) primary key ,
 	nombre nvarchar(100) not null,
 	precio decimal(10,2),
 	created_at datetime default getdate(),
@@ -32,16 +32,21 @@ create table Academico.Carrera(
 )
 go
 create table Academico.Estudiante(
-	id int identity(1,1) primary key
+	id_estudiante int identity(1,1) primary key
 	, cif varchar(8) unique not null
 	, nombres nvarchar(60) not null
 	, apellidos nvarchar(60) not null
 	, fechaNac datetime null
-	, email nvarchar(120) null
-	, idCarrera int 
+	, email nvarchar(120)not null
+	, id_carrera int not null
+	, created_at datetime default getdate(),
+	updated_at datetime null,
+	deleted_at datetime null,
+	constraint uq_cif unique (cif),
 	constraint uq_email unique(email),
-	constraint ck_email check(email like '%_@_%'),
-	constraint fk_id foreign key (id) references Academico.carrera(id)
+	constraint ck_email check(email like '%_@_%._%'),
+	constraint fk_estudiante_carrera foreign key (id_carrera) references Academico.carrera(id_carrera)
+	on delete no action on update cascade
 	
 	
 )
@@ -49,7 +54,8 @@ go
 
 create table Seguridad.Cargo(
 	id int identity(1,1) primary key
-	, nombre nvarchar not null,
+	, nombres nvarchar(60) not null,
+	apellidos nvarchar(60) not null,
 	created_at datetime default getdate(),
 	updated_at datetime null,
 	deleted_at datetime null,
@@ -60,7 +66,6 @@ go
 create table Seguridad.Usuario(
 	idUsuario int identity(1,1) primary key,
 	idCargo int not null,
-	cif varchar(8) unique not null
 	, nombres nvarchar(60) not null
 	, apellidos nvarchar(60) not null
 	, fechaNac datetime null
