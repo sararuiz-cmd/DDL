@@ -36,13 +36,19 @@ create table Academico.Estudiante(
 	, apellidos nvarchar(60) not null
 	, fechaNac datetime null
 	, email nvarchar(120) null
-	, idCarrera int foreign key references Academico.carrera(id)
+	, idCarrera int 
+	constraint uq_email unique(email),
+	constraint ck_email check(email like '%_@_%'),
+	constraint fk_id foreign key (id) references Academico.carrera(id)
+	on delete no action
+	on update cascade
+	
 )
 go
 
 create table Seguridad.Cargo(
 	id int identity(1,1) primary key
-	, nombre nvarchar,
+	, nombre nvarchar not null,
 	created_at datetime default getdate(),
 	updated_at datetime null,
 	deleted_at datetime null
