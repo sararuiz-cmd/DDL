@@ -25,7 +25,8 @@ create table Academico.Carrera(
 	precio decimal(10,2),
 	created_at datetime default getdate(),
 	updated_at datetime null,
-	deleted_at datetime null
+	deleted_at datetime null,
+	Constraint ck_carrera check (precio>0)
 )
 go
 create table Academico.Estudiante(
