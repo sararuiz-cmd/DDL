@@ -39,3 +39,24 @@ create table Academico.Estudiante(
 )
 go
 
+create table Seguridad.Cargo(
+	id int identity(1,1) primary key
+	, nombre nvarchar,
+	created_at datetime default getdate(),
+	updated_at datetime null,
+	deleted_at datetime null
+)go
+
+create table Seguridad.Usuario(
+	idUsuario int identity(1,1) primary key,
+	cif varchar(8) unique not null
+	, nombres nvarchar(60) not null
+	, apellidos nvarchar(60) not null
+	, fechaNac datetime null
+	, password nvarchar(60) not null
+	, email nvarchar(120) null,
+	created_at datetime default getdate(),
+	updated_at datetime null,
+	deleted_at datetime null
+)
+go
